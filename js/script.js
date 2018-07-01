@@ -28,11 +28,11 @@ var winnerNumberOfRoundsInfo = document.getElementById("winner_info");
 NameCheck();
 NewGame();
 
-new_game_button.addEventListener("click", function() {
+newGameButton.addEventListener("click", function() {
   maxRounds = "";
-  while (isInteger(maxRounds)) {
+  while (isInteger(maxRounds) == false) {
     maxRounds = window.prompt("How Many Rounds Wins The Game?");
-    if (isInteger(maxRounds)) {
+    if (isInteger(maxRounds) == false) {
       window.alert("Please enter correct number");
     }
   }
@@ -238,8 +238,8 @@ function newLine(text) {
 
 //Number Of Rounds Check
 function isInteger(x) {
-  if (x == Math.round(x) && x >= 1) return false;
-  return true;
+  if (x == Math.round(x) && x >= 1) return true;
+  return false;
 }
 
 //String check

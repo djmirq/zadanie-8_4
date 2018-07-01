@@ -1,0 +1,160 @@
+
+$white: #fff;
+$white2: #fefefe;
+$green_dark: #02ac46;
+$gree_very_dark: rgba(0, 116, 29, 0.83);
+
+$url_0: url(https://cdn.icon-icons.com/icons2/906/PNG/512/grab_icon-icons.com_70119.png);
+$url_1: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQd98LEAPVyUJ9FviL1yMPC5U9_qr0fNKUtvvvRTO1Nkmrxs4_7);
+$url_2: url(https://d30y9cdsu7xlg0.cloudfront.net/png/477922-200.png);
+$url_3: url(https://media.istockphoto.com/photos/hideous-monstrous-man-picture-id147092827?k=6&m=147092827&s=612x612&w=0&h=DLPsgsqZAQD0MZLBGejxW8BAIcXExYwuJMAkYRx6N6c=);
+$url_4: url(https://www.em360tech.com/wp-content/uploads/2018/03/artificial-intelligence-brain.jpg);
+
+%extend_1 {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+}
+
+%extend_2 {
+  min-height: 25%;
+  height: 25%;
+  display: flex;
+  align-items: center;
+}
+
+.game {
+  margin: 0 auto;
+  max-width: 80%;
+  max-width: 700px;
+  display: flex;
+  padding-bottom: 10px;
+  .rock {
+    @extend %extend_1;
+    background-image: $url_0;
+    border: solid 1px $white2;
+  }
+  .scissors {
+    @extend %extend_1;
+    background-image: $url_1;
+    border: solid 1px $white2;
+  }
+  .paper {
+    @extend %extend_1;
+    background-image: $url_2;
+    border: solid 1px $white2;
+  }
+  .col-3 {
+    min-height: 400px;
+    max-width: 120px;
+    flex: 1;
+    .player {
+      min-height: 25%;
+      height: 25%;
+      float: left;
+      width: 100%;
+      .player1_foto {
+        @extend %extend_1;
+        height: 80%;
+        min-height: 80%;
+        background-image: $url_3;
+      }
+      .player2_foto {
+        @extend %extend_1;
+        height: 80%;
+        min-height: 80%;
+        background-image: $url_4;
+      }
+      .player1_name {
+        height: 20%;
+        min-height: 20%;
+      }
+      .player2_name {
+        height: 20%;
+        min-height: 20%;
+      }
+    }
+    .left {
+      @extend %extend_2;
+      justify-content: flex-end;
+    }
+    .right {
+      @extend %extend_2;
+      justify-content: flex-start;
+    }
+  }
+  .col-6 {
+    min-height: 500px;
+    height: 500px;
+    min-width: 250px;
+    flex: 3;
+    .menu {
+      min-height: 25%;
+      .new_game {
+        margin: 4px;
+      }
+    }
+    .information1 {
+      min-height: 25%;
+      height: 25%;
+      .round_number {
+        font-size: 50px;
+        width: 100%;
+        min-height: 80%;
+        justify-content: center;
+      }
+      .message {
+        width: 100%;
+        min-height: 20%;
+      }
+    }
+    .information2 {
+      min-height: 25%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 50px;
+      color: $gree_very_dark;
+    }
+    .message {
+      min-height: 25%;
+      height: 25%;
+      font-size: 25px;
+    }
+  }
+}
+body {
+  text-align: center;
+}
+// * {
+// 	box-sizing: border-box;
+// }
+button {
+  display: inline-block;
+  padding: 11px 50px;
+  max-width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: $white;
+  background-color: $green_dark;
+  border: 2px solid $green_dark;
+  border-radius: 4px;
+  transition: color 0.3s, background-color 0.3s;
+  cursor: pointer;
+  outline: 0 !important;
+  text-decoration: none;
+  touch-action: manipulation;
+  user-select: none;
+  &:hover {
+    color: $green_dark;
+    background-color: $white;
+  }
+  &:active {
+    color: $green_dark;
+    background-color: $white;
+  }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css\style.css">
+    <meta charset="UTF-8">
+    <title>Game !</title>
+</head>
+
+<body>
+    <div class="game">
+
+        <!-- PLAYER 1 -->
+        <div class="col-3">
+            <div class="player">
+                <div class="player1_foto"></div>
+                <div class="player1_name" id="player1_name">Player One</div>
+            </div>
+            <div class="left rock" id="p1_rock">
+            </div>
+            <div class="left scissors" id="p1_scissors">
+            </div>
+            <div class="left paper" id="p1_paper">
+            </div>
+        </div>
+
+        <!-- SCORE ROUND MESSAGE -->
+        <div class="col-6">
+            <div class="menu">
+                <button class="new_game" id="new_game_button">New GAME</button>
+            </div>
+            <div class="information1">
+                <div class="round_number" id="rounds">Round: ?</div>
+                <div class="winner" id="winner_info">...</div>
+            </div>
+            <div class="information2">
+                <div class="score" id="results">Score: ? - ?</div>
+            </div>
+            <div class="message" id="output">
+            </div>
+        </div>
+
+        <!-- COMPUTER MENU -->
+        <div class="col-3">
+            <div class="player">
+                <div class="player2_foto"></div>
+                <div class="player2_name">Intel i7</div>
+            </div>
+            <div class="right rock" id="p2_rock">
+            </div>
+            <div class="right scissors" id="p2_scissors">
+            </div>
+            <div class="right paper" id="p2_paper">
+            </div>
+        </div>
+    </div>
+
+    <!-- JS -->
+    <script src="js\script.js"></script>
+</body>
+
+</html>

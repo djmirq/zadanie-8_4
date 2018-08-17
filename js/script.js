@@ -1,14 +1,22 @@
 "use strict";
 
 var player1NameDiv = document.getElementById("player1_name");
-var player1Name;
 
-var maxRounds = 10;
-var currentRound = 1;
-var computerMove = 0;
-var playerScore = 0;
-var computerScore = 0;
-var gameLocked = false;
+var params = {
+  maxRounds: 10,
+  currentRound: 1,
+  playerScore: 0,
+  computerScore: 0,
+  gameLocked: false,
+  player1Name: "",
+  progres: {
+    roundNumber: [],
+    playerMove: [],
+    computerMove: [],
+    roundResult: [],
+    currentScore: []
+  }
+};
 
 var newGameButton = document.getElementById("new_game_button");
 
@@ -29,10 +37,10 @@ NameCheck();
 NewGame();
 
 newGameButton.addEventListener("click", function() {
-  maxRounds = "";
-  while (isInteger(maxRounds) == false) {
-    maxRounds = window.prompt("How Many Rounds Wins The Game?");
-    if (isInteger(maxRounds) == false) {
+  params.maxRounds = "";
+  while (isInteger(params.maxRounds) == false) {
+    params.maxRounds = window.prompt("How Many Rounds Wins The Game?");
+    if (isInteger(params.maxRounds) == false) {
       window.alert("Please enter correct number");
     }
   }
@@ -41,46 +49,47 @@ newGameButton.addEventListener("click", function() {
 
 //Name Prompt
 function NameCheck() {
-    while (isEmpty(player1Name)) {
-        player1Name = window.prompt("Witamy w grze KAM NOŻYCE PAPIER! Podaj Swoje Imię lub nick", "Player One");
-        if (isEmpty(player1Name)) {
-            window.alert("Please enter correct name");
-        }
+  while (isEmpty(params.player1Name)) {
+    params.player1Name = window.prompt(
+      "Witamy w grze KAM NOŻYCE PAPIER! Podaj Swoje Imię lub nick",
+      "Player One"
+    );
+    if (isEmpty(params.player1Name)) {
+      window.alert("Please enter correct name");
     }
-    player1NameDiv.innerHTML = player1Name;
+  }
+  player1NameDiv.innerHTML = params.player1Name;
 }
 
 //New Game
 function NewGame() {
-  winnerNumberOfRoundsInfo.innerHTML = maxRounds + " Won Rounds End The Game";
-  currentRound = 1;
+  params.gameLocked = false;
+  winnerNumberOfRoundsInfo.innerHTML =
+    params.maxRounds + " Won Rounds End The Game";
+  params.currentRound = 1;
   Round();
-  playerScore = 0;
-  computerScore = 0;
+  params.playerScore = 0;
+  params.computerScore = 0;
   Score();
   outputMsg.innerHTML =
     "Witamy w grze !!! <br><br> Aby rozpocząć, kliknij New GAME <br> Następnie wybierz po lewej stronie symbol" +
     "<br><br>";
   ResetButtonsState();
-  gameLocked = false;
+
+  while (params.progres.currentScore.length > 0) {
+    params.progres.roundNumber.pop();
+    params.progres.playerMove.pop();
+    params.progres.computerMove.pop();
+    params.progres.currentScore.pop();
+    params.progres.roundResult.pop();
+  }
 }
 
-//Buttons Listeners
-player1Rock.addEventListener("click", function() {
-  ResetButtonsState();
-  this.style.border = "solid 5px #AA00FF";
-  playerMove(1);
-});
-player1Scissors.addEventListener("click", function() {
-  ResetButtonsState();
-  this.style.border = "solid 5px #AA00FF";
-  playerMove(2);
-});
-player1Paper.addEventListener("click", function() {
-  ResetButtonsState();
-  this.style.border = "solid 5px #AA00FF";
-  playerMove(3);
-});
+var playerMoveButtons = document.querySelectorAll(".player-move");
+
+for (var i = 0; i < playerMoveButtons.length; i++) {
+  playerMoveButtons[i].addEventListener("click", playerMove);
+}
 
 //Reset Buttons
 function ResetButtonsState() {
@@ -94,9 +103,13 @@ function ResetButtonsState() {
 }
 
 //Player Move
-function playerMove(playerMoveNumber) {
+function playerMove(event) {
+  ResetButtonsState();
+
+  event.target.style.border = "solid 5px #AA00FF";
+
   if (outputMsg.innerHTML.indexOf("GAME OVER") == -1) {
-    if (gameLocked) {
+    if (params.gameLocked) {
       outputMsg.innerHTML += newLine(
         "GAME OVER, please press the New GAME button"
       );
@@ -106,19 +119,13 @@ function playerMove(playerMoveNumber) {
     return;
   }
 
-  switch (playerMoveNumber) {
-    case 1:
-      outputMsg.innerHTML = newLine(player1Name + " choose ROCK");
-      break;
-    case 2:
-      outputMsg.innerHTML = newLine(player1Name + " choose SCISSORS");
-      break;
-    case 3:
-      outputMsg.innerHTML = newLine(player1Name + " choose PAPER");
-      break;
-  }
-  
-  Winner(playerMoveNumber, ComputerMove());
+  var playerOneMove = event.target.getAttribute("data-move");
+  outputMsg.innerHTML = newLine(
+    params.player1Name + " choose " + playerOneMove
+  );
+
+  Winner(playerOneMove, ComputerMove());
+  Progress();
   Score();
   Round();
 }
@@ -126,105 +133,172 @@ function playerMove(playerMoveNumber) {
 //Computer Move
 function ComputerMove() {
   var computerMoveNumber = Math.floor(Math.random() * 3 + 1);
+  var moveName = "";
 
   switch (computerMoveNumber) {
     case 1:
       outputMsg.innerHTML += newLine("Computer choose ROCK");
       player2Rock.style.border = "solid 5px #AA00FF";
+      moveName = "rock";
       break;
     case 2:
       outputMsg.innerHTML += newLine("Computer choose SCISSORS");
       player2Scissors.style.border = "solid 5px #AA00FF";
+      moveName = "scissors";
       break;
     case 3:
       outputMsg.innerHTML += newLine("Computer choose PAPER");
       player2Paper.style.border = "solid 5px #AA00FF";
+      moveName = "paper";
       break;
   }
-  return computerMoveNumber;
+  return moveName;
 }
 
 //and The Winner Is...
-function Winner(playerMoveNumber, computerMoveNumber) {
-    
-  switch (playerMoveNumber) {
-    case 1:
-      switch (computerMoveNumber) {
-        case 1:
+function Winner(playerMove, computerMove) {
+  params.progres.playerMove.push(playerMove);
+  params.progres.computerMove.push(computerMove);
+
+  switch (playerMove) {
+    case "rock":
+      switch (computerMove) {
+        case "rock":
           outputMsg.innerHTML += newLine("DRAW");
+          params.progres.roundResult.push("0-0");
           break;
-        case 2:
+        case "scissors":
           outputMsg.innerHTML += newLine(
             "YOU WON :)<br> You played ROCK, computer played SCISSORS"
           );
-          playerScore++;
+          params.playerScore++;
+          params.progres.roundResult.push("1-0");
           break;
-        case 3:
+        case "paper":
           outputMsg.innerHTML += newLine(
             "YOU LOST :(<br> You played ROCK, computer played PAPER"
           );
-          computerScore++;
+          params.computerScore++;
+          params.progres.roundResult.push("0-1");
           break;
       }
       break;
-    case 2:
-      switch (computerMoveNumber) {
-        case 1:
+    case "scissors":
+      switch (computerMove) {
+        case "rock":
           outputMsg.innerHTML += newLine(
             newLine("YOU LOST :(<br> You played SCISSORS, computer played ROCK")
           );
-          computerScore++;
+          params.computerScore++;
+          params.progres.roundResult.push("0-1");
           break;
-        case 2:
+        case "scissors":
           outputMsg.innerHTML += newLine("DRAW");
+          params.progres.roundResult.push("0-0");
           break;
-        case 3:
+        case "paper":
           outputMsg.innerHTML += newLine(
             "YOU WON :)<br> You played SCISSORS, computer played PAPER"
           );
-          playerScore++;
+          params.playerScore++;
+          params.progres.roundResult.push("1-0");
           break;
       }
       break;
-    case 3:
-      switch (computerMoveNumber) {
-        case 1:
+    case "paper":
+      switch (computerMove) {
+        case "rock":
           outputMsg.innerHTML += newLine(
             "YOU WON :)<br> You played PAPER, computer played ROCK"
           );
-          playerScore++;
+          params.playerScore++;
+          params.progres.roundResult.push("1-0");
           break;
-        case 2:
+        case "scissors":
           outputMsg.innerHTML += newLine(
             "YOU LOST :(<br> You played PAPER, computer played SCISSORS"
           );
-          computerScore++;
+          params.computerScore++;
+          params.progres.roundResult.push("0-1");
           break;
-        case 3:
+        case "paper":
           outputMsg.innerHTML += newLine("DRAW");
+          params.progres.roundResult.push("0-0");
           break;
       }
       break;
   }
+}
+
+//Progress
+function Progress() {
+  params.progres.roundNumber.push(params.progres.currentScore.length + 1);
+  params.progres.currentScore.push(
+    params.playerScore + "-" + params.computerScore
+  );
 }
 
 //Total Score
 function Score() {
-  outputScore.innerHTML = "Score: " + playerScore + " - " + computerScore;
-  if (playerScore == maxRounds) {
-    outputMsg.innerHTML = newLine(
-      "CONGRATULATIONS !!!<br><br>YOU WON THE ENTIRE GAME !!!"
-    );
-    gameLocked = true;
+  var gameResult = "";
+
+  var domstring = "<br>";
+  domstring +=
+    "<table><tr><th>Round No</th><th>Player Move</th><th>Computer Move</th><th>Round Results</th><th>Current Score</th></tr>";
+
+  for (let i = 0; i < params.progres.currentScore.length; i++) {
+    domstring += "<tr><td>" + params.progres.roundNumber[i] + "</td>";
+    domstring += "<td>" + params.progres.playerMove[i] + "</td>";
+    domstring += "<td>" + params.progres.computerMove[i] + "</td>";
+    domstring += "<td>" + params.progres.roundResult[i] + "</td>";
+    domstring += "<td>" + params.progres.currentScore[i] + "</td></tr>";
   }
-  if (computerScore == maxRounds) {
-    outputMsg.innerHTML = newLine("YOU LOSE ;(<br> BETTER LUCK NEXT TIME !!!");
-    gameLocked = true;
+
+  domstring += "</table>";
+  // params.progres.currentScore.forEach(element => {
+  //   domstring += '<tr><td>' + element + '</td></tr>';
+  // });
+
+  outputScore.innerHTML =
+    "Score: " + params.playerScore + " - " + params.computerScore;
+  if (params.playerScore == params.maxRounds) {
+    gameResult = "CONGRATULATIONS !!!<br><br>YOU WON THE ENTIRE GAME !!!";
+    // outputMsg.innerHTML = newLine("CONGRATULATIONS !!!<br><br>YOU WON THE ENTIRE GAME !!!");
+    params.gameLocked = true;
+  }
+  if (params.computerScore == params.maxRounds) {
+    gameResult = "YOU LOSE ;(<br> BETTER LUCK NEXT TIME !!!";
+    // outputMsg.innerHTML = newLine("YOU LOSE ;(<br> BETTER LUCK NEXT TIME !!!");
+    params.gameLocked = true;
+  }
+
+  if (params.gameLocked) {
+    Modal(0, gameResult + domstring);
   }
 }
+
+function Modal(modalNum, modalMsg) {
+  var x = document.querySelector("#modal-overlay").getElementsByTagName("a");
+  document.querySelector("#modal-overlay").classList.add("show");
+
+  for (var i = 0; i < x.length; i++) {
+    if (i == modalNum) {
+      x[i].parentNode.classList.add("show");
+      var head = document.querySelectorAll(".modal header");
+      head[0].innerHTML = "GAME OVER !";
+      var par = document.querySelectorAll(".modal p");
+      par[0].innerHTML = modalMsg;
+    } else {
+      x[i].parentNode.classList.remove("show");
+    }
+  }
+}
+
 //Round Num
 function Round() {
-  outputRounds.innerHTML = "Round: " + currentRound++;
+  if (!params.gameLocked) {
+    outputRounds.innerHTML = "Round: " + params.currentRound++;
+  }
 }
 
 //<br>
@@ -246,3 +320,16 @@ function isInteger(x) {
 function isEmpty(value) {
   return value == null || value === "";
 }
+
+var hideModal = function(event) {
+  event.preventDefault();
+  document.querySelector("#modal-overlay").classList.remove("show");
+};
+
+var closeButtons = document.querySelectorAll(".modal .close");
+
+for (var i = 0; i < closeButtons.length; i++) {
+  closeButtons[i].addEventListener("click", hideModal);
+}
+
+//document.querySelector('#modal-overlay').addEventListener('click', hideModal);

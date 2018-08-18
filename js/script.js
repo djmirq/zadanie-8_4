@@ -19,6 +19,7 @@ var params = {
 };
 
 var newGameButton = document.getElementById("new_game_button");
+var submitButton = document.getElementById("paramsSubmitButton");
 
 var player1Rock = document.getElementById("p1_rock");
 var player1Scissors = document.getElementById("p1_scissors");
@@ -33,36 +34,51 @@ var outputRounds = document.getElementById("rounds");
 var winnerNumberOfRoundsInfo = document.getElementById("winner_info");
 
 //Reset On Start or New Game Button
-NameCheck();
+//NameCheck();
 NewGame();
 
 newGameButton.addEventListener("click", function() {
-  params.maxRounds = "";
-  while (isInteger(params.maxRounds) == false) {
-    params.maxRounds = window.prompt("How Many Rounds Wins The Game?");
-    if (isInteger(params.maxRounds) == false) {
-      window.alert("Please enter correct number");
-    }
-  }
+  // params.maxRounds = "";
+  // while (isInteger(params.maxRounds) == false) {
+  //   params.maxRounds = window.prompt("How Many Rounds Wins The Game?");
+  //   if (isInteger(params.maxRounds) == false) {
+  //     window.alert("Please enter correct number");
+  //   }
+  // }
   NewGame();
 });
 
-//Name Prompt
-function NameCheck() {
-  while (isEmpty(params.player1Name)) {
-    params.player1Name = window.prompt(
-      "Witamy w grze KAM NOŻYCE PAPIER! Podaj Swoje Imię lub nick",
-      "Player One"
-    );
-    if (isEmpty(params.player1Name)) {
-      window.alert("Please enter correct name");
-    }
-  }
+//submitButton.addEventListener("click", function() {
+
+function myFunction() {
+  event.preventDefault();
+
+  params.player1Name = document.getElementById("name").value;
   player1NameDiv.innerHTML = params.player1Name;
+
+  params.maxRounds = document.getElementById("roundsNum").value;
+
+  document.querySelector("#modal-overlay").classList.remove("show");
 }
+
+//Name Prompt
+//function NameCheck() {
+// while (isEmpty(params.player1Name)) {
+//   params.player1Name = window.prompt(
+//     "Witamy w grze KAMIEŃ NOŻYCE PAPIER! Podaj Swoje Imię lub nick",
+//     "Player One"
+//   );
+//   if (isEmpty(params.player1Name)) {
+//     window.alert("Please enter correct name");
+//   }
+// }
+// player1NameDiv.innerHTML = params.player1Name;
+//}
 
 //New Game
 function NewGame() {
+  Modal(1, "Witaj w nowej grze, proszę podaj dane:", "NOWA GRA !");
+
   params.gameLocked = false;
   winnerNumberOfRoundsInfo.innerHTML =
     params.maxRounds + " Won Rounds End The Game";
@@ -273,11 +289,11 @@ function Score() {
   }
 
   if (params.gameLocked) {
-    Modal(0, gameResult + domstring);
+    Modal(0, gameResult + domstring, "GAME OVER !");
   }
 }
 
-function Modal(modalNum, modalMsg) {
+function Modal(modalNum, modalMsg, modalHeader) {
   var x = document.querySelector("#modal-overlay").getElementsByTagName("a");
   document.querySelector("#modal-overlay").classList.add("show");
 
@@ -285,9 +301,9 @@ function Modal(modalNum, modalMsg) {
     if (i == modalNum) {
       x[i].parentNode.classList.add("show");
       var head = document.querySelectorAll(".modal header");
-      head[0].innerHTML = "GAME OVER !";
+      head[modalNum].innerHTML = modalHeader;
       var par = document.querySelectorAll(".modal p");
-      par[0].innerHTML = modalMsg;
+      par[modalNum].innerHTML = modalMsg;
     } else {
       x[i].parentNode.classList.remove("show");
     }

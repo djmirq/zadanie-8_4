@@ -186,7 +186,7 @@ button {
 	&.show {
 		display: block;
 	}
-	
+
 	.close {
 		position: absolute;
 		right: 0;
@@ -208,4 +208,18 @@ button {
 		min-height: 30px;
 		padding: 5px 30px;
 	}
+}
+
+#modal-two{
+  .field, input{
+    font-size: 20px;
+  }
+  input {
+    width:90%;
+    text-align: center;
+  }
+  .field{
+    margin :10px;
+  }
+ 
 }

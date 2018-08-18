@@ -60,25 +60,39 @@
                 <a href="#mod1" class="close">x</a>
                 <header>Modal one</header>
                 <div class="content">
-                    <p>Dolor sit amet!</p>
+                    <p>...</p>
                 </div>
             </div>
             <div class="modal" id="modal-two">
                 <a href="#mod2" class="close">x</a>
                 <header>Modal two</header>
                 <div class="content">
-                    <p>Dolor sit amet!</p>
-                </div>
-            </div>
-            <div class="modal" id="modal-three">
-                <a href="#mod3" class="close">x</a>
-                <header>Modal three</header>
-                <div class="content">
-                    <p>Dolor sit amet!</p>
+                    <hr>
+
+                    <p>Witaj w nowej grze, proszę podaj dane:</p>
+                    <form action="" method="" class="contents-params" onsubmit="myFunction()">
+                        <div class="field">
+                            <label for="player-name">YOUR NAME</label>
+                            <input type="text" placeholder="" name="player-name" id="name" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{1,20}$" maxlength="20" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="rounds">ROUNDS</label>
+                            <input type="number" pattern="[0-9]{3}" step="1" max="100" data-politespace data-grouplength="0" data-delimiter="," data-reverse
+                                value="10" name="rounds" id="roundsNum" required>
+                        </div>
+
+                        <hr>
+
+                        <div class="button">
+                            <button class="startButton" id="paramsSubmitButton" type="submit">
+                                <a>Graj !</a>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- JS -->

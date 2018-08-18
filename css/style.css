@@ -63,4 +63,10 @@ button:active { color: #02ac46; background-color: #fff; }
 .modal header { font-size: 20px; line-height: 30px; min-height: 30px; font-weight: bold; padding: 0 30px; }
 
 .modal .content { min-height: 30px; padding: 5px 30px; }
+
+#modal-two .field, #modal-two input { font-size: 20px; }
+
+#modal-two input { width: 90%; text-align: center; }
+
+#modal-two .field { margin: 10px; }
 /*# sourceMappingURL=style.css.map */
